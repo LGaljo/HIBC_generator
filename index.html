@@ -1,154 +1,152 @@
 <!DOCTYPE html>
-<html class="my" lang="en">
+<html lang="en">
+//ver 1.1
 <head>
-	<meta name="viewport" content="width=device-width">
-	<meta charset="UTF-8">
-	<title>BARCODE generator</title>
+    <meta charset="UTF-8">
+    <title>BARCODE generator</title>
 </head>
 <body bgcolor="white">
 <div class="header" align="center">
-	<h1>BARCODE generator</h1>
+    <h1>HIBC BARCODE generator</h1>
 </div>
 <div class="body" align="center">
-	<form action="index.html" method="post">
-		<p>
-			<label for="lic">LIC: </label>
-			<input type="text" id="lic" placeholder="H108">
-		</p>
-		<p>
-			<label for="pn">P/N: </label>
-			<input type="text" id="pn" placeholder="S2030">
-		</p>
-		<p>
-			<label for="uom">Merska enota: </label>
-			<input type="text" id="uom" placeholder="0">
-		</p>
-		<p>
-			<label for="output_item">Izpis: </label>
-			<input type="text" id="output_item" placeholder="Besedilo za ITEM barcode" readonly>
-			<input type="button" id="copy_button_item" value="Kopiraj">
-		</p>
-		<p>
-			<label for="JJJ">Dan: </label>
-			<input type="text" id="JJJ" placeholder="Zaporedna številka dneva">
-		</p>
-		<p>
-			<label for="YY">Leto: </label>
-			<input type="text" id="YY" placeholder="16">
-		</p>
-		<p>
-			<label for="RRR">Serija: </label>
-			<input type="text" id="RRR" placeholder="001">
-		</p>
-		<p>
-			<label for="output_lot">Izpis: </label>
-			<input type="text" id="output_lot" placeholder="Besedilo za LOT barcode" readonly>
-			<input type="button" id="copy_button_lot" value="Kopiraj">
-		</p>
-		<p>
-			<input type="submit" value="Izračunaj!" onclick="return calculate();">
-		</p>
-	</form>
+<form action="index.html" method="post">
+    <p>
+    <label for="lic">LIC: </label>
+    <input type="text" id="lic" placeholder="H108">
+    </p>
+    <p>
+    <label for="pn">P/N: </label>
+    <input type="text" id="pn" placeholder="S2030">
+    </p>
+    <p>
+    <label for="uom">Unit Of Measure: </label>
+    <input type="text" id="uom" placeholder="0">
+    </p>
+    <p>
+    <label for="output_item">Izpis: </label>
+    <input type="text" id="output_item" placeholder="Izpis" readonly>
+        <input type="button" id="copy_button_item" value="Kopiraj">
+    </p>
+    <p>
+    <label for="JJJ">Dan: </label>
+    <input type="text" id="JJJ" placeholder="Zaporedna številka dneva">
+    </p>
+    <p>
+    <label for="YY">Leto: </label>
+    <input type="text" id="YY" placeholder="16">
+    </p>
+    <p>
+    <label for="RRR">Serija: </label>
+    <input type="text" id="RRR" placeholder="001">
+    </p>
+    <p>
+    <label for="LCD">P/N Check Digit: </label>
+    <input type="text" id="LCD" placeholder="Check Digit">
+    </p>
+    <p>
+    <label for="output_lot">Izpis: </label>
+    <input type="text" id="output_lot" placeholder="Izpis" readonly>
+        <input type="button" id="copy_button_lot" value="Kopiraj">
+    </p>
+    <p>
+    <input type="submit" value="Izračunaj!" onclick="return calculate();">
+    </p>
+</form>
 </div>
 <script>
-	var copyBtn_item = document.querySelector('#copy_button_item')
-	copyBtn_item.addEventListener('click', function(){
-		var output_item = document.querySelector('#output_item')
-		output_item.select();
-		document.execCommand('copy');
-	}, false);
+    var copyBtn_item = document.querySelector('#copy_button_item')
+    copyBtn_item.addEventListener('click', function(){
+        var output_item = document.querySelector('#output_item')
+        output_item.select();
+        document.execCommand('copy');
+    }, false);
 
-	var copyBtn_lot = document.querySelector('#copy_button_lot')
-	copyBtn_lot.addEventListener('click', function(){
-		var output_item = document.querySelector('#output_lot')
-		output_item.select();
-		document.execCommand('copy');
-	}, false);
-	function calculate() {
-		//DEFAULTS
-		document.getElementById("lic").defaultValue = "H108";
-		document.getElementById("uom").defaultValue = "0";
-		document.getElementById("YY").defaultValue = "16";
-		document.getElementById("output_item").defaultValue = "0";
-		document.getElementById("output_lot").defaultValue = "0";
+    var copyBtn_lot = document.querySelector('#copy_button_lot')
+    copyBtn_lot.addEventListener('click', function(){
+        var output_item = document.querySelector('#output_lot')
+        output_item.select();
+        document.execCommand('copy');
+    }, false);
 
-		//DICTIONARY
-		var array = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I",
-			"J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "-", ".", " ",
-			"$", "/", "+", "%"];
+    function calculate() {
+        //DEFAULTS
+        document.getElementById("lic").defaultValue = "H108";
+        document.getElementById("uom").defaultValue = "0";
+        document.getElementById("YY").defaultValue = "16";
 
-		//INPUT & MERGING
-		var pn_line = "+" + document.getElementById("lic").value + document.getElementById("pn").value + document.getElementById("uom").value;
-		var length = pn_line.length;
+        //DICTIONARY
+        var array = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I",
+            "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "-", ".", " ",
+            "$", "/", "+", "%"];
 
-		//FOR SERIAL NUMBER
-		var value = 0;
-		for(i = 0; i < length; i++){
-			value = value + array.indexOf(pn_line[i])
-		}
-		var mod = value % 43;
-		document.getElementById("output_item").value = pn_line + array[mod];
+        //INPUT & MERGING
+        var pn_line = "+" + document.getElementById("lic").value + document.getElementById("pn").value + document.getElementById("uom").value;
+        var length = pn_line.length;
 
-		//INPUT & MERGING FOR LOT
-		var lot_line = "+$" + document.getElementById("JJJ").value + document.getElementById("YY").value + document.getElementById("RRR").value + array[mod];
-		var length2 = lot_line.length;
+        //FOR SERIAL NUMBER
+        var value = 0;
+        for(i = 0; i < length; i++){
+            value = value + array.indexOf(pn_line[i])
+        }
+        var mod = value % 43;
+        document.getElementById("output_item").value = pn_line + array[mod];
 
-		//FOR LOT NUMBER
-		var value2 = 0;
-		for(i = 0; i < length2; i++){
-			value2 = value2 + array.indexOf(lot_line[i])
-		}
-		var mod2 = value2 % 43;
-		document.getElementById("output_lot").value = lot_line + array[mod2];
-		return false;
-	}
+        //določim vrednost za check digit
+        var CD;
+        var check = document.getElementById("LCD").value;
+        if (check == "") {
+            CD = array[mod]
+        } else {
+            CD = document.getElementById("LCD").value;
+        }
+
+        //INPUT & MERGING FOR LOT
+        var lot_line = "+$" + document.getElementById("JJJ").value + document.getElementById("YY").value + document.getElementById("RRR").value + CD;
+        var length2 = lot_line.length;
+
+        //FOR LOT NUMBER
+        var value2 = 0;
+        for(i = 0; i < length2; i++){
+            value2 = value2 + array.indexOf(lot_line[i])
+        }
+        var mod2 = value2 % 43;
+        document.getElementById("output_lot").value = lot_line + array[mod2];
+        return false;
+    }
 </script>
 <style>
-	@media (min-resolution: 300dpi) and (max-resolution: 600dpi){
-		.my {
-			zoom: 300%;
-		}
-		.body{
-			margin-top: 31%;
-		}
-	}
-	@media (resolution: 96dpi){
-		.my {
-			zoom: 125%;
-		}
-		.body{
-			margin-top: 110px;
-		}
-	}
-	.header {
-		position:fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		background-color: #E2001A;
-		color: white;
-		font-family: helveticaneuelt_pro_45_ltRg, Arial, Helvetica, sans-serif;
-	}
-	.footer {
-		position:fixed;
-		bottom:0;
-		left: 0;
-		width:100%;
-		background-color:#E2001A;
-		color:white;
-		font-size: 90%;
-		font-family: helveticaneuelt_pro_45_ltRg, Arial, Helvetica, sans-serif;
-	}
-	.body {
-		position: relative;
-       margin-top: 120px;
-		text-align: center;
-		color: #393f46;
-		font-family: helveticaneuelt_pro_45_ltRg, Arial, Helvetica, sans-serif;
-	}
+
+    .header {
+        position:fixed;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        background-color: #E2001A;
+        color: white;
+        font-family: helveticaneuelt_pro_45_ltRg, Arial, Helvetica, sans-serif;
+    }
+
+    .footer {
+        position:fixed;
+        bottom:0px;
+        left: 0px;
+        width:100%;
+        background-color:#E2001A;
+        color:white;
+        font-size: 90%;
+        font-family: helveticaneuelt_pro_45_ltRg, Arial, Helvetica, sans-serif;
+    }
+    .body {
+        position: relative;
+        text-align: center;
+        top: 80px;
+        color: #393f46;
+        font-family: helveticaneuelt_pro_45_ltRg, Arial, Helvetica, sans-serif;
+    }
 </style>
 <div class="footer" align="center">
-	© Luka Galjot
+    © Luka Galjot - ver. 1.1
 </div>
 </body>
 </html>
